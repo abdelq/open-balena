@@ -1,7 +1,3 @@
-# TODO HAProxy ConfigMap's ports from values?
-# TODO Move to ConfigMaps and Secrets
-# TODO Comments for all values
-
 issuer:
   enabled: ${OPENBALENA_ACME_CERT_ENABLED}
   name: letsencrypt-staging
@@ -17,7 +13,8 @@ issuer:
 ingress:
   annotations:
     kubernetes.io/ingress.class: haproxy
-    cert-manager.io/issuer: letsencrypt-prod
+    cert-manager.io/issuer: letsencrypt-staging
+    # cert-manager.io/issuer: letsencrypt-prod
   tls:
     - hosts:
         - api.${OPENBALENA_HOST_NAME}

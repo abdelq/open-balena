@@ -67,8 +67,6 @@ api:
       value: "${OPENBALENA_ROOT_CA}"
     - name: COOKIE_SESSION_SECRET
       value: "${OPENBALENA_COOKIE_SESSION_SECRET}"
-    - name: DB_HOST  # XXX
-      value: "openbalena-db"
     - name: DB_PASSWORD
       value: "docker"
     - name: DB_PORT
@@ -103,8 +101,6 @@ api:
       value: "__unused__"
     - name: PUBNUB_SUBSCRIBE_KEY
       value: "__unused__"
-    - name: REDIS_HOST  # XXX
-      value: "openbalena-redis"
     - name: REDIS_PORT
       value: "6379"
     - name: REGISTRY2_HOST

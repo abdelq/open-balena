@@ -39,6 +39,10 @@ spec:
           env:
           - name: CONFD_BACKEND
             value: "ENV"
+          - name: DB_HOST
+            value: {{ include "openbalena.db.fullname" . }}
+          - name: REDIS_HOST
+            value: {{ include "openbalena.redis.fullname" . }}
           {{- with .Values.api.env }}
             {{- toYaml . | nindent 10 }}
           {{- end }}

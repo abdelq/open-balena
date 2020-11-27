@@ -138,6 +138,7 @@ registry:
     repository: balena/open-balena-registry
     tag: ${OPENBALENA_REGISTRY_VERSION_TAG}
   storage: "10Gi"
+  storageClass: default
   service:
     ports:
       - port: 80
@@ -222,6 +223,7 @@ db:
     repository: balena/open-balena-db
     tag: ${OPENBALENA_DB_VERSION_TAG}
   storage: "10Gi"
+  storageClass: default
   service:
     ports:
       - port: 5432
@@ -232,6 +234,7 @@ s3:
     repository: balena/open-balena-s3
     tag: ${OPENBALENA_S3_VERSION_TAG}
   storage: "50Gi"
+  storageClass: default
   service:
     ports:
       - port: 80
@@ -249,6 +252,7 @@ redis:
     repository: redis
     tag: alpine
   storage: "10Gi"
+  storageClass: default
   service:
     ports:
       - port: 6379

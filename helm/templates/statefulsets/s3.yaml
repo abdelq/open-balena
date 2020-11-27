@@ -63,8 +63,8 @@ spec:
       name: export
     spec:
       accessModes: ["ReadWriteOnce"]
-      {{- if .Values.s3.storageClassName }}
-      storageClassName: {{ .Values.s3.storageClassName }}
+      {{- if .Values.s3.storageClass }}
+      storageClassName: {{ .Values.s3.storageClass }}
       {{- end }}
       resources:
         requests:

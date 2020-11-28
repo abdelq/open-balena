@@ -11,48 +11,49 @@ echo_bold() {
   printf "\\033[1m%s\\033[0m\\n" "$@"
 }
 
-VERSIONS_FILE="${BASE_DIR}/k8s/versions"
+VERSIONS_FILE="${BASE_DIR}/compose/versions"
 if [ ! -f "$VERSIONS_FILE" ]; then
   echo_bold "No service versions defined in ${VERSIONS_FILE}"
   exit 1
 fi
 
-SETTINGS_FILE="${CONFIG_DIR}/k8s/settings.yaml"
-if [[ ! -f "$SETTINGS_FILE" ]]; then
+source "${VERSIONS_FILE}"
+
+ENV_FILE="${CONFIG_DIR}/activate"
+if [ ! -f "$ENV_FILE" ]; then
   echo_bold 'No configuration found; please create one first with: ./scripts/quickstart'
   echo_bold 'See README.md for help.'
   exit 1
 fi
 
-# Uninstall
-if [ "$@" = "uninstall" ]; then
-  helm uninstall openbalena --namespace openbalena
-  kubectl delete namespace openbalena
-  kubectl delete namespace cert-manager
-  exit 0
+source "${ENV_FILE}"
+
+# TODO Include the MDNS publisher if the domain is valid
+
+# shellcheck source=/dev/null
+
+if [ "$1" = "install" ]; then
+  helm dependency update "${BASE_DIR}/helm"
+  envsubst < "${CONFIG_DIR}/kubernetes.yaml" | \
+    helm install --values - --create-namespace \
+      --namespace "${OPENBALENA_K8S_NAMESPACE}" \
+      "${OPENBALENA_K8S_NAME}" \
+      "${BASE_DIR}/helm"
 fi
 
-install_certmanager () {
-  kubectl create namespace cert-manager || true
-  kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.1/cert-manager.yaml
-}
-
-install_openbalena () {
-  # Create namespace
-  kubectl create namespace openbalena || true
-
-  # Helm
-  helm dependency update "${BASE_DIR}/k8s/chart"
-  helm upgrade --install openbalena "${BASE_DIR}/k8s/chart" --namespace openbalena -f "${SETTINGS_FILE}"
-
-  # Apply cert-manager issuer
-  kubectl apply -f "${CONFIG_DIR}/k8s/cert-issuer.yml"
-}
-
-# Install cert-manager only when using install command
-if [ "$@" = "install" ]; then
-  install_certmanager
+if [ "$1" = "upgrade" ]; then
+  helm dependency update "${BASE_DIR}/helm"
+  envsubst < "${CONFIG_DIR}/kubernetes.yaml" | \
+    helm upgrade --values - \
+      --namespace "${OPENBALENA_K8S_NAMESPACE}" \
+      "${OPENBALENA_K8S_NAME}" \
+      "${BASE_DIR}/helm"
 fi
 
-# Always use install_openbalena, because it upgrades as well
-install_openbalena
+if [ "$1" = "uninstall" ]; then
+  helm uninstall \
+    --namespace "${OPENBALENA_K8S_NAMESPACE}" \
+    "${OPENBALENA_K8S_NAME}"
+fi
+
+# TODO Write help/usage for this script

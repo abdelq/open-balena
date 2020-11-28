@@ -130,9 +130,7 @@ if [ "${patch_hosts}" = "true" ]; then
 fi
 
 echo_bold "==> Creating Kubernetes values.yaml..."
-envsubst "$(sed 's/export /$/;s/=.*//' "${CONFIG_DIR}/activate")" \
-    < "${BASE_DIR}/helm/values.yaml" \
-    > "${CONFIG_DIR}/kubernetes.yaml"
+cp "${BASE_DIR}/helm/values.yaml" "${CONFIG_DIR}/kubernetes.yaml"
 
 # TODO Specify steps for Kubernetes
 echo_bold "==> Success!"

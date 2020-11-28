@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-kubernetes-ingress-tcp
+  name: {{ printf "%s-haproxy-tcp" .Release.Name | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "openbalena.labels" . | nindent 4 }}

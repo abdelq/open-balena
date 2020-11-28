@@ -26,7 +26,7 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          {{- $serviceName := print "openbalena." .backend.serviceName ".fullname" -}}
+          {{- $serviceName := printf "openbalena.%s.fullname" .backend.serviceName }}
           - path: {{ .path }}
             pathType: {{ .pathType }}
             backend:

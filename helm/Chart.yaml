@@ -3,5 +3,6 @@ name: openbalena
 version: 0.5.0
 dependencies:
   - name: kubernetes-ingress
+    alias: haproxy
     version: "1.8.2"
     repository: "https://haproxytech.github.io/helm-charts"

@@ -27,6 +27,9 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-redis
         image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
+        {{- if .Values.redis.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.redis.imagePullPolicy }}
+        {{- end }}
         {{- with .Values.redis.ports }}
         ports:
           {{- toYaml . | nindent 10 }}

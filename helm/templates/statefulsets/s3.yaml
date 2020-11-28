@@ -27,6 +27,9 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-s3
         image: "{{ .Values.s3.image.repository }}:{{ .Values.s3.image.tag }}"
+        {{- if .Values.s3.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.s3.imagePullPolicy }}
+        {{- end }}
         {{- with .Values.s3.ports }}
         ports:
           {{- toYaml . | nindent 10 }}

@@ -27,6 +27,9 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-registry
         image: "{{ .Values.registry.image.repository }}:{{ .Values.registry.image.tag }}"
+        {{- if .Values.registry.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.registry.imagePullPolicy }}
+        {{- end }}
         {{- with .Values.registry.ports }}
         ports:
           {{- toYaml . | nindent 10 }}

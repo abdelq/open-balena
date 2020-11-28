@@ -20,8 +20,8 @@ spec:
       containers:
         - name: {{ .Chart.Name }}-api
           image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
-          {{- if .Values.api.image.pullPolicy }}
-          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          {{- if .Values.api.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.api.imagePullPolicy }}
           {{- end }}
           {{- with .Values.api.ports }}
           ports:

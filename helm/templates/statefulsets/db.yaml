@@ -27,6 +27,9 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-db
         image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
+        {{- if .Values.db.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.db.imagePullPolicy }}
+        {{- end }}
         {{- with .Values.db.ports }}
         ports:
           {{- toYaml . | nindent 10 }}

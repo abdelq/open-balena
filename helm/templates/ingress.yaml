@@ -1,4 +1,10 @@
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
+{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" }}
+apiVersion: networking.k8s.io/v1beta1
+{{- else }}
+apiVersion: extensions/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ include "openbalena.fullname" . }}
@@ -28,11 +34,18 @@ spec:
           {{- range .paths }}
           {{- $serviceName := printf "openbalena.%s.fullname" .backend.serviceName }}
           - path: {{ .path }}
+            {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: {{ .pathType }}
+            {{- end }}
             backend:
+            {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
               service:
                 name: {{ include $serviceName $ }}
                 port:
                   number: {{ .backend.servicePort }}
+            {{- else }}
+              serviceName: {{ include $serviceName $ }}
+              servicePort: {{ .backend.servicePort }}
+            {{- end }}
           {{- end }}
     {{- end }}

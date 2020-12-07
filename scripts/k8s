@@ -33,9 +33,10 @@ source "${ENV_FILE}"
 # shellcheck source=/dev/null
 
 if [ "$1" = "install" ]; then
+  kubectl create namespace "${OPENBALENA_K8S_NAMESPACE}"
   helm dependency update "${BASE_DIR}/helm"
   envsubst < "${CONFIG_DIR}/kubernetes.yaml" | \
-    helm install --values - --create-namespace \
+    helm install --values - \
       --namespace "${OPENBALENA_K8S_NAMESPACE}" \
       "${OPENBALENA_K8S_NAME}" \
       "${BASE_DIR}/helm"
